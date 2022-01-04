@@ -1,0 +1,96 @@
+const firebase = require("firebase/app");
+const firestore = require("firebase/firestore");
+
+const logger = require("../utils/logger");
+
+/**
+ * A class for simplifying firebase functions
+ * @class MyCatLikesFirebase
+ */
+class MyCatLikesFirebase {
+  /**
+   * The constructor for the MyCatLikesFirebase class
+   * @param {object} options an object representing the options for the class
+   * @param {object} options.firebaseConfig the config that firebase gives you for your app
+   * @param {boolean} options.loggingEnabled a boolean for toggling logging on or off
+   * @constructor
+   */
+  constructor(options) {
+    this.firebaseConfig = options.firebaseConfig;
+    this.loggingEnabled = options.loggingEnabled || true;
+
+    this.initialize = () => {
+      if (!this.firebaseConfig)
+        return logger.logErr("No firebaseConfig provided!");
+
+      this.app = firebase.initializeApp(this.firebaseConfig);
+      this.db = firestore.initializeFirestore(this.app);
+
+      loggingEnabled
+        ? logger.logInfo("my-cat-likes-firebase has been initialized!")
+        : "";
+
+      return this;
+    };
+
+    /**
+     * A function for creating or overwriting docs in Firestore
+     * @param {object} data the data to write to the doc
+     * @param {string} path the path to write the doc to in Firestore
+     * @param {...string} pathSegments any extra path segments will be added onto the path
+     * @returns {Promise<boolean>} A promise if the write succeeded
+     */
+    this.createDoc = async (data, path, ...pathSegments) => {
+      if (typeof data !== "object")
+        return logger.logErr("The data argument is not of type object!");
+
+      if (typeof path !== "string")
+        return logger.logErr("The path argument is not of type string!");
+
+      for (let pathSegment of pathSegments)
+        if (typeof pathSegment !== "string")
+          return logger.logErr("One path segment is not of type string!");
+
+      return new Promise((resolve, reject) => {
+        let doc = firestore.doc(this.db, path, ...pathSegments);
+
+        await firestore.setDoc(doc, data);
+
+        resolve(true);
+      });
+    };
+
+    /**
+     * A function for updating documents in Firestore
+     * @param {object} data the data to update the doc with
+     * @param {string} path the path to the doc to be updated
+     * @param  {...pathSegments} pathSegments any extra path segments will be added onto the path
+     * @returns {Promise<boolean>} A promise resolving to a boolean of if the write succeeded or not
+     */
+    this.updateDoc = async (data, path, ...pathSegments) => {
+      if (typeof data !== "object")
+        return logger.logErr("The data argument is not of type object!");
+
+      if (typeof path !== "string")
+        return logger.logErr("The path argument is not of type string!");
+
+      for (let pathSegment of pathSegments)
+        if (typeof pathSegment !== "string")
+          return logger.logErr("One path segment is not of type string!");
+
+      return new Promise((resolve, reject) => {
+        let doc = firestore.doc(this.db, path, ...pathSegments);
+
+        doc
+          ? await firestore.updateDoc(doc, data)
+          : (reject(false), logger.logErr(`Doc was not found!`));
+
+        resolve(true);
+      });
+    };
+  }
+}
+
+module.exports = {
+  MyCatLikesFirebase,
+};

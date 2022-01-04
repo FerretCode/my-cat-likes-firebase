@@ -1,0 +1,29 @@
+{
+  "name": "my-cat-likes-firebase",
+  "version": "1.0.0",
+  "description": "A firebase wrapper to make working with firebase painless",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FerretCode/my-cat-likes-firebase.git"
+  },
+  "keywords": [
+    "firebase",
+    "firestore",
+    "easy firebase",
+    "easy firestore"
+  ],
+  "author": "ferretcode",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FerretCode/my-cat-likes-firebase/issues"
+  },
+  "homepage": "https://github.com/FerretCode/my-cat-likes-firebase#readme",
+  "dependencies": {
+    "chalk": "^5.0.0",
+    "firebase": "^9.6.1"
+  }
+}
