@@ -88,6 +88,31 @@ class MyCatLikesFirebase {
         resolve(true);
       });
     };
+
+    /**
+     * A function to get doc data at a path
+     * @param {string} path the path to the document to get
+     * @param {...string} pathSegments any path segments will be added to the path
+     * @returns {Promise<object|string>} a promise with either the document data or an error string
+     */
+    this.getDoc = async (path, ...pathSegments) => {
+      if (typeof data !== "object")
+        return logger.logErr("The data argument is not of type object!");
+
+      if (typeof path !== "string")
+        return logger.logErr("The path argument is not of type string!");
+
+      for (let pathSegment of pathSegments)
+        if (typeof pathSegment !== "string")
+          return logger.logErr("One path segment is not of type string!");
+
+      return new Promise((resolve, reject) => {
+        let doc = firestore.doc(this.db, path, ...pathSegments);
+        let data = await firestore.getDoc(doc);
+
+        data ? resolve(data) : reject("Unable to get doc!");
+      });
+    };
   }
 }
 
