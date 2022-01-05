@@ -1,4 +1,4 @@
-const chalk = require("chalk").default;
+const chalk = require("chalk");
 
 /**
  * Logs an info message

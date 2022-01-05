@@ -24,9 +24,9 @@ class MyCatLikesFirebase {
         return logger.logErr("No firebaseConfig provided!");
 
       this.app = firebase.initializeApp(this.firebaseConfig);
-      this.db = firestore.initializeFirestore(this.app);
+      this.db = firestore.initializeFirestore(this.app, {});
 
-      loggingEnabled
+      this.loggingEnabled
         ? logger.logInfo("my-cat-likes-firebase has been initialized!")
         : "";
 
