@@ -43,24 +43,19 @@ class MyCatLikesFirebaseServer {
      * A function for creating or overwriting docs in Firestore
      * @param {object} data the data to write to the doc
      * @param {string} path the path to write the doc to in Firestore
-     * @param {...string} pathSegments any extra path segments will be added onto the path
      * @returns {Promise<boolean>} A promise if the write succeeded
      */
-    this.createDoc = (data, path, ...pathSegments) => {
+    this.createDoc = (data, path) => {
       if (typeof data !== "object")
         return logger.logErr("The data argument is not of type object!");
 
       if (typeof path !== "string")
         return logger.logErr("The path argument is not of type string!");
 
-      for (let pathSegment of pathSegments)
-        if (typeof pathSegment !== "string")
-          return logger.logErr("One path segment is not of type string!");
-
       return new Promise((resolve, reject) => {
-        let doc = firestore.doc(this.db, path, ...pathSegments);
+        let doc = this.db.doc(path);
 
-        firestore.setDoc(doc, data).then(() => resolve(true));
+        doc.set(data).then(() => resolve(true));
       });
     };
 
@@ -68,25 +63,20 @@ class MyCatLikesFirebaseServer {
      * A function for updating documents in Firestore
      * @param {object} data the data to update the doc with
      * @param {string} path the path to the doc to be updated
-     * @param  {...pathSegments} pathSegments any extra path segments will be added onto the path
      * @returns {Promise<boolean>} A promise resolving to a boolean of if the write succeeded or not
      */
-    this.updateDoc = (data, path, ...pathSegments) => {
+    this.updateDoc = (data, path) => {
       if (typeof data !== "object")
         return logger.logErr("The data argument is not of type object!");
 
       if (typeof path !== "string")
         return logger.logErr("The path argument is not of type string!");
 
-      for (let pathSegment of pathSegments)
-        if (typeof pathSegment !== "string")
-          return logger.logErr("One path segment is not of type string!");
-
       return new Promise((resolve, reject) => {
-        let doc = firestore.doc(this.db, path, ...pathSegments);
+        let doc = this.db.doc(this.db, path, ...pathSegments);
 
         doc
-          ? firestore.updateDoc(doc, data)
+          ? doc.update(data)
           : (reject(false), logger.logErr(`Doc was not found!`));
 
         resolve(true);
@@ -96,23 +86,15 @@ class MyCatLikesFirebaseServer {
     /**
      * A function to get doc data at a path
      * @param {string} path the path to the document to get
-     * @param {...string} pathSegments any path segments will be added to the path
      * @returns {Promise<object|string>} a promise with either the document data or an error string
      */
-    this.getDoc = (path, ...pathSegments) => {
-      if (typeof data !== "object")
-        return logger.logErr("The data argument is not of type object!");
-
+    this.getDoc = (path) => {
       if (typeof path !== "string")
         return logger.logErr("The path argument is not of type string!");
 
-      for (let pathSegment of pathSegments)
-        if (typeof pathSegment !== "string")
-          return logger.logErr("One path segment is not of type string!");
-
       return new Promise((resolve, reject) => {
-        let doc = firestore.doc(this.db, path, ...pathSegments);
-        let data = firestore.getDoc(doc).then(() => {
+        let doc = this.db.doc(path);
+        doc.get().then((data) => {
           data ? resolve(data) : reject("Unable to get doc!");
         });
       });
