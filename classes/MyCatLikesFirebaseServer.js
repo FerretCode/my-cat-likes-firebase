@@ -95,7 +95,7 @@ class MyCatLikesFirebaseServer {
       return new Promise((resolve, reject) => {
         let doc = this.db.doc(path);
         doc.get().then((data) => {
-          data ? resolve(data.data()) : reject("Unable to get doc!");
+          data.exists ? resolve(data.data()) : reject("Unable to get doc!");
         });
       });
     };
