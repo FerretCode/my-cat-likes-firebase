@@ -1,6 +1,6 @@
 {
   "name": "my-cat-likes-firebase",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A firebase wrapper to make working with firebase painless",
   "main": "index.js",
   "scripts": {
