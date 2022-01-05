@@ -40,7 +40,7 @@ class MyCatLikesFirebase {
      * @param {...string} pathSegments any extra path segments will be added onto the path
      * @returns {Promise<boolean>} A promise if the write succeeded
      */
-    this.createDoc = async (data, path, ...pathSegments) => {
+    this.createDoc = (data, path, ...pathSegments) => {
       if (typeof data !== "object")
         return logger.logErr("The data argument is not of type object!");
 
@@ -54,9 +54,7 @@ class MyCatLikesFirebase {
       return new Promise((resolve, reject) => {
         let doc = firestore.doc(this.db, path, ...pathSegments);
 
-        await firestore.setDoc(doc, data);
-
-        resolve(true);
+        firestore.setDoc(doc, data).then(() => resolve(true));
       });
     };
 
@@ -67,7 +65,7 @@ class MyCatLikesFirebase {
      * @param  {...pathSegments} pathSegments any extra path segments will be added onto the path
      * @returns {Promise<boolean>} A promise resolving to a boolean of if the write succeeded or not
      */
-    this.updateDoc = async (data, path, ...pathSegments) => {
+    this.updateDoc = (data, path, ...pathSegments) => {
       if (typeof data !== "object")
         return logger.logErr("The data argument is not of type object!");
 
@@ -82,7 +80,7 @@ class MyCatLikesFirebase {
         let doc = firestore.doc(this.db, path, ...pathSegments);
 
         doc
-          ? await firestore.updateDoc(doc, data)
+          ? firestore.updateDoc(doc, data)
           : (reject(false), logger.logErr(`Doc was not found!`));
 
         resolve(true);
@@ -95,7 +93,7 @@ class MyCatLikesFirebase {
      * @param {...string} pathSegments any path segments will be added to the path
      * @returns {Promise<object|string>} a promise with either the document data or an error string
      */
-    this.getDoc = async (path, ...pathSegments) => {
+    this.getDoc = (path, ...pathSegments) => {
       if (typeof data !== "object")
         return logger.logErr("The data argument is not of type object!");
 
@@ -108,9 +106,9 @@ class MyCatLikesFirebase {
 
       return new Promise((resolve, reject) => {
         let doc = firestore.doc(this.db, path, ...pathSegments);
-        let data = await firestore.getDoc(doc);
-
-        data ? resolve(data) : reject("Unable to get doc!");
+        let data = firestore.getDoc(doc).then(() => {
+          data ? resolve(data) : reject("Unable to get doc!");
+        });
       });
     };
   }
