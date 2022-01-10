@@ -73,7 +73,7 @@ class MyCatLikesFirebaseServer {
         return logger.logErr("The path argument is not of type string!");
 
       return new Promise((resolve, reject) => {
-        let doc = this.db.doc(this.db, path);
+        let doc = this.db.doc(path);
 
         doc
           ? doc.update(data)
