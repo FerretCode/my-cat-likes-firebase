@@ -84,6 +84,26 @@ class MyCatLikesFirebaseServer {
     };
 
     /**
+     * A function for deleting documents in Firestore
+     * @param {string} path the path to the doc to be deleted
+     * @returns {Promise<boolean>} A promise resolving to a boolean of if the delete succeeded or not
+     */
+    this.deleteDoc = (path) => {
+      if(typeof path !== "string")
+        return logger.logErr("The path argument is not of type string!");
+
+      return new Promise((resolve, reject) => {
+        let doc = this.db.doc(path);
+
+        doc ? 
+          doc.delete() :
+          (reject(false), logger.logErr(`Doc was not found!`));
+
+        resolve(true);
+      })
+    }
+
+    /**
      * A function to get doc data at a path
      * @param {string} path the path to the document to get
      * @returns {Promise<object|string>} a promise with either the document data or an error string

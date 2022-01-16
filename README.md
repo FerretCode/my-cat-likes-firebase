@@ -80,3 +80,22 @@ firebase.getDoc("path/to/doc");
 | `pathSegments` | `...string` | Any additional path segments that will be added onto the path |
 
 Returns a promise that resolves to the doc data or an error string
+
+### Delete Doc
+
+```js
+const { MyCatLikesFirebase } = require("my-cat-likes-firebase");
+
+let firebase = new MyCatLikesFirebase({
+  firebaseConfig: config,
+  loggingEnabled: true,
+});
+
+firebase.deleteDoc("path/to/doc");
+```
+
+| Parameter      | Type        | Description                                                   |
+| :------------- | :---------- | :------------------------------------------------------------ |
+| `path`         | `string`    | The path to the doc to delete                                    |
+
+Returns a promise that resolves to a boolean or an error string
