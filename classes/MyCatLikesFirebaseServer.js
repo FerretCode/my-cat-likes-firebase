@@ -89,19 +89,19 @@ class MyCatLikesFirebaseServer {
      * @returns {Promise<boolean>} A promise resolving to a boolean of if the delete succeeded or not
      */
     this.deleteDoc = (path) => {
-      if(typeof path !== "string")
+      if (typeof path !== "string")
         return logger.logErr("The path argument is not of type string!");
 
       return new Promise((resolve, reject) => {
         let doc = this.db.doc(path);
 
-        doc ? 
-          doc.delete() :
-          (reject(false), logger.logErr(`Doc was not found!`));
+        doc
+          ? doc.delete().catch((err) => reject(err))
+          : (reject(false), logger.logErr(`Doc was not found!`));
 
         resolve(true);
-      })
-    }
+      });
+    };
 
     /**
      * A function to get doc data at a path
