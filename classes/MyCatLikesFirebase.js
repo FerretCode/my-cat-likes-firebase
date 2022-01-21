@@ -34,6 +34,40 @@ class MyCatLikesFirebase {
     };
 
     /**
+     * A function that creates or updates an existing document
+     * @param {object} data the data to write to the doc
+     * @param {string} path the path to write the doc to in Firestore
+     * @returns {Promise<boolean>} A promise that resolves to a boolean if the write succeeded
+     */
+    this.createOrUpdateDoc = (data, path) => {
+      if (typeof data !== "object")
+        return logger.logErr("The data argument is not of type object!");
+
+      if (typeof path !== "string")
+        return logger.logErr("The path argument is not of type string!");
+
+      return new Promise((resolve, reject) => {
+        let doc = firestore.doc(this.db, path);
+
+        firestore.getDoc(doc).then((data) => {
+          if (data) {
+            this.updateDoc(data, path)
+              .then(() => {
+                resolve(true);
+              })
+              .catch((err) => reject(err));
+          } else {
+            this.createDoc(data, path)
+              .then(() => {
+                resolve(true);
+              })
+              .catch((err) => reject(err));
+          }
+        });
+      });
+    };
+
+    /**
      * A function for creating or overwriting docs in Firestore
      * @param {object} data the data to write to the doc
      * @param {string} path the path to write the doc to in Firestore
@@ -93,19 +127,19 @@ class MyCatLikesFirebase {
      * @returns {Promise<boolean>} A promise resolving to a boolean of if the delete succeeded or not
      */
     this.deleteDoc = (path) => {
-      if(typeof path !== "string")
+      if (typeof path !== "string")
         return logger.logErr("The path argument is not of type string!");
 
       return new Promise((resolve, reject) => {
         let doc = firestore.doc(this.db, path);
 
-        doc ? 
-          firestore.deleteDoc(doc) :
-          (reject(false), logger.logErr(`Doc was not found!`));
+        doc
+          ? firestore.deleteDoc(doc)
+          : (reject(false), logger.logErr(`Doc was not found!`));
 
         resolve(true);
-      })
-    }
+      });
+    };
 
     /**
      * A function to get doc data at a path

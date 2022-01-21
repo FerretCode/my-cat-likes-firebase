@@ -40,6 +40,40 @@ class MyCatLikesFirebaseServer {
     };
 
     /**
+     * A function that creates or updates an existing document
+     * @param {object} data the data to write to the doc
+     * @param {string} path the path to write the doc to in Firestore
+     * @returns {Promise<boolean>} A promise that resolves to a boolean if the write succeeded
+     */
+    this.createOrUpdateDoc = (data, path) => {
+      if (typeof data !== "object")
+        return logger.logErr("The data argument is not of type object!");
+
+      if (typeof path !== "string")
+        return logger.logErr("The path argument is not of type string!");
+
+      return new Promise((resolve, reject) => {
+        let doc = this.db.doc(path);
+
+        doc.get().then((data) => {
+          if (data) {
+            this.updateDoc(data, path)
+              .then(() => {
+                resolve(true);
+              })
+              .catch((err) => reject(err));
+          } else {
+            this.createDoc(data, path)
+              .then(() => {
+                resolve(true);
+              })
+              .catch((err) => reject(err));
+          }
+        });
+      });
+    };
+
+    /**
      * A function for creating or overwriting docs in Firestore
      * @param {object} data the data to write to the doc
      * @param {string} path the path to write the doc to in Firestore
