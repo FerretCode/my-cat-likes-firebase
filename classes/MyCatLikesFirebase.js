@@ -50,7 +50,7 @@ class MyCatLikesFirebase {
         let doc = firestore.doc(this.db, path);
 
         firestore.getDoc(doc).then((docData) => {
-          if (docData) {
+          if (docData.exists()) {
             this.updateDoc(data, path)
               .then(() => {
                 resolve(true);

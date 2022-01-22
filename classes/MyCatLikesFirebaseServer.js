@@ -56,7 +56,7 @@ class MyCatLikesFirebaseServer {
         let doc = this.db.doc(path);
 
         doc.get().then((docData) => {
-          if (docData) {
+          if (docData.exists) {
             this.updateDoc(data, path)
               .then(() => {
                 resolve(true);
