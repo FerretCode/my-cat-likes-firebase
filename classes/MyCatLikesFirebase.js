@@ -49,8 +49,8 @@ class MyCatLikesFirebase {
       return new Promise((resolve, reject) => {
         let doc = firestore.doc(this.db, path);
 
-        firestore.getDoc(doc).then((data) => {
-          if (data) {
+        firestore.getDoc(doc).then((docData) => {
+          if (docData) {
             this.updateDoc(data, path)
               .then(() => {
                 resolve(true);

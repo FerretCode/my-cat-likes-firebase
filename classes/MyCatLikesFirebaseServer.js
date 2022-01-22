@@ -55,8 +55,8 @@ class MyCatLikesFirebaseServer {
       return new Promise((resolve, reject) => {
         let doc = this.db.doc(path);
 
-        doc.get().then((data) => {
-          if (data) {
+        doc.get().then((docData) => {
+          if (docData) {
             this.updateDoc(data, path)
               .then(() => {
                 resolve(true);
