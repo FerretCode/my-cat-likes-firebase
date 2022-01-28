@@ -160,9 +160,12 @@ class MyCatLikesFirebase {
 
       return new Promise((resolve, reject) => {
         let doc = firestore.doc(this.db, path, ...pathSegments);
-        let data = firestore.getDoc(doc).then(() => {
-          data ? resolve(data) : reject("Unable to get doc!");
-        });
+        firestore
+          .getDoc(doc)
+          .then((data) => {
+            data.exists ? resolve(data) : resolve(undefined);
+          })
+          .catch((err) => reject(err));
       });
     };
   }
