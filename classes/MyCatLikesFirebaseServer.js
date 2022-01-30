@@ -156,6 +156,30 @@ class MyCatLikesFirebaseServer {
           .catch((err) => reject(err));
       });
     };
+
+    /**
+     * A function that returns all docs from a collection
+     * @param {string} path the path to the collection to fetch docs from
+     */
+    this.getDocs = (path) => {
+      if (typeof path !== "string")
+        return logger.logErr("The path argument is not of type string!");
+
+      return new Promise((resolve, reject) => {
+        let objectToResolve = {};
+
+        let collection = this.db.collection(path);
+
+        collection
+          .get()
+          .then((snapshot) => {
+            for (let doc of snapshot.docs) objectToResolve[doc.id] = doc.data();
+
+            resolve(objectToResolve);
+          })
+          .catch((err) => reject(err));
+      });
+    };
   }
 }
 
