@@ -116,6 +116,25 @@ firebase.getDoc("path/to/doc");
 
 Returns a promise that resolves to the doc data or an error string
 
+### Get Docs
+
+```js
+const { MyCatLikesFirebase } = require("my-cat-likes-firebase");
+
+let firebase = new MyCatLikesFirebase({
+  firebaseConfig: config,
+  loggingEnabled: true,
+});
+
+firebase.getDocs("path/to/collection");
+```
+
+| Parameter | Type     | Description                                   |
+| :-------- | :------- | :-------------------------------------------- |
+| `path`    | `string` | The path to the collection to fetch docs from |
+
+Returns a promise that resolves to an object containing the docs or an error
+
 ### Delete Doc
 
 ```js
