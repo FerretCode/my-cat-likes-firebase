@@ -19,20 +19,15 @@ class MyCatLikesFirebase {
     this.firebaseConfig = options.firebaseConfig;
     this.loggingEnabled = options.loggingEnabled || true;
 
-    this.initialize = () => {
-      if (!this.firebaseConfig)
-        return logger.logErr("No firebaseConfig provided!");
+    if (!this.firebaseConfig)
+      return logger.logErr("No firebaseConfig provided!");
 
-      this.app = firebase.initializeApp(this.firebaseConfig);
-      this.db = firestore.initializeFirestore(this.app, {});
+    this.app = firebase.initializeApp(this.firebaseConfig);
+    this.db = firestore.initializeFirestore(this.app, {});
 
-      this.loggingEnabled
-        ? logger.logInfo("my-cat-likes-firebase has been initialized!")
-        : "";
-
-      return this;
-    };
-
+    this.loggingEnabled
+      ? logger.logInfo("my-cat-likes-firebase has been initialized!")
+      : "";
     /**
      * A function that creates or updates an existing document
      * @param {object} data the data to write to the doc

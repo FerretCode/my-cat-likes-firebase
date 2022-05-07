@@ -21,23 +21,19 @@ class MyCatLikesFirebaseServer {
     this.firebaseCredentialsPath = options.firebaseCredentialsPath;
     this.loggingEnabled = options.loggingEnabled || true;
 
-    this.initialize = () => {
-      if (!this.firebaseCredentialsPath)
-        return logger.logErr("No firebaseCredentialsPath provided!");
+    if (!this.firebaseCredentialsPath)
+      return logger.logErr("No firebaseCredentialsPath provided!");
 
-      this.app = firebase.initializeApp({
-        credential: firebase.cert(
-          JSON.parse(fs.readFileSync(this.firebaseCredentialsPath))
-        ),
-      });
-      this.db = firestore.getFirestore(this.app);
+    this.app = firebase.initializeApp({
+      credential: firebase.cert(
+        JSON.parse(fs.readFileSync(this.firebaseCredentialsPath))
+      ),
+    });
+    this.db = firestore.getFirestore(this.app);
 
-      this.loggingEnabled
-        ? logger.logInfo("my-cat-likes-firebase has been initialized!")
-        : "";
-
-      return this;
-    };
+    this.loggingEnabled
+      ? logger.logInfo("my-cat-likes-firebase has been initialized!")
+      : "";
 
     /**
      * A function that creates or updates an existing document
