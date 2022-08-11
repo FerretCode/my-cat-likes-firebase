@@ -32,7 +32,7 @@ class MyCatLikesFirebaseServer {
     this.db = firestore.getFirestore(this.app);
 
     this.loggingEnabled
-      ? logger.logInfo("my-cat-likes-firebase has been initialized!")
+      ? logger.logInfo("Firebase has been initialized!")
       : "";
 
     /**
@@ -68,6 +68,35 @@ class MyCatLikesFirebaseServer {
         });
       });
     };
+    
+    /**
+     * A function to find or create a document in Firestore
+     * @param {object} data the data to write to the path if the doc is not found
+     * @param {string} path the path to find or write to in Firestore
+     * @returns {Promise<object|undefined>} A promise containing either the data from the doc or undefined
+     */
+    this.findOrCreateDoc = (data, path) => {
+      if(typeof data !== "object")
+        return logger.logErr("The data argument is not of type object!");
+      
+      if(typeof path !== "string")
+        return logger.logErr("The path argument is not of type string!");
+      
+      return new Promise((resolve, reject) => {
+        let doc = this.db.doc(path);
+        
+        doc
+          .get()
+          .then((data) => {
+            if(data.exists) return resolve(data.data());
+          
+            this.createDoc(data, path)
+              .then(() => resolve(data))
+              .catch((err) => reject(err));
+          })
+          .catch((err) => reject(err));
+      })
+    }
 
     /**
      * A function for creating or overwriting docs in Firestore

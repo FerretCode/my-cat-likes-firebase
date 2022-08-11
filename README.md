@@ -34,6 +34,26 @@ A quick note about MyCatLikesFirebaseServer, all functions are the same as clien
 
 ## Documentation 📜
 
+### Find Or Create Doc
+#### Currently only works on Server
+```js
+const { MyCatLikesFirebaseServer } = require("my-cat-likes-firebase");
+
+const firebase = new MyCatLikesFirebaseServer({
+  firebaseConfig: config,
+  loggingEnabled: true,
+});
+
+firebase.findOrCreateDoc({ someCoolData: ":)" }, `path/to/doc`)
+```
+
+| Parameter      | Type        | Description                                                   |
+| :------------- | :---------- | :------------------------------------------------------------ |
+| `data`         | `object`    | The data to write to the doc with if not found                |
+| `path`         | `string`    | The path to the doc to write to or find                       |
+
+Returns a promise that resolves to a boolean returning the data that was either written or found in the doc
+
 ### Create Doc
 
 ```js

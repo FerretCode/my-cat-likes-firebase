@@ -26,7 +26,7 @@ class MyCatLikesFirebase {
     this.db = firestore.initializeFirestore(this.app, {});
 
     this.loggingEnabled
-      ? logger.logInfo("my-cat-likes-firebase has been initialized!")
+      ? logger.logInfo("Firebase has been initialized!")
       : "";
     /**
      * A function that creates or updates an existing document
