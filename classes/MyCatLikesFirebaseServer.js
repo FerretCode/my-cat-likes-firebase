@@ -87,8 +87,8 @@ class MyCatLikesFirebaseServer {
         
         doc
           .get()
-          .then((data) => {
-            if(data.exists) return resolve(data.data());
+          .then((docData) => {
+            if(docData.exists) return resolve(docData.data());
           
             this.createDoc(data, path)
               .then(() => resolve(data))
